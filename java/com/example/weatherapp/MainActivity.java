@@ -1,11 +1,15 @@
 package com.example.weatherapp;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -44,14 +48,28 @@ public class MainActivity extends AppCompatActivity {
                 if(user_field.getText().toString().trim().equals(""))
                     Toast.makeText(MainActivity.this, R.string.no_user_input, Toast.LENGTH_LONG).show();
                 else {
+
                     String city = user_field.getText().toString();
                     String key = "8236be500fb1619f49986793c55f8c8b";
                     String url_weather = "https://api.openweathermap.org/data/2.5/weather?q=" + city +"&appid=" + key +"&units=metric&lang=ru";
 
                     new GetURLDate().execute(url_weather);
+
+                    Utils.hideKeyboard( MainActivity.this);
                 }
             }
         });
+    }
+
+    public static class Utils{
+        public static void hideKeyboard(@NonNull Activity activity) {
+            // Check if no view has focus:
+            View view = activity.getCurrentFocus();
+            if (view != null) {
+                InputMethodManager inputManager = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
+                inputManager.hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+            }
+        }
     }
 
     private class GetURLDate extends AsyncTask<String, String, String> {
@@ -83,8 +101,10 @@ public class MainActivity extends AppCompatActivity {
                 return buffer.toString();
 
             } catch (MalformedURLException e) {
+                result_info.setText("Ошибка 1");
                 e.printStackTrace();
             } catch (IOException e) {
+                result_info.setText("Ошибка 2");
                 e.printStackTrace();
             } finally {
                 if(connection != null)
@@ -94,7 +114,8 @@ public class MainActivity extends AppCompatActivity {
                     if(reader != null)
                         reader.close();
                 } catch (IOException e) {
-                        e.printStackTrace();
+                    result_info.setText("Ошибка 3");
+                    e.printStackTrace();
                 }
             }
 
@@ -107,7 +128,7 @@ public class MainActivity extends AppCompatActivity {
             super.onPostExecute(result);
 
             try {
-                JSONObject jsonObject = new JSONObject(result); // jsonObject.getJSONObject("weather").getString("description") +
+                JSONObject jsonObject = new JSONObject(result);
 
                 int wind =  (int) Math.round(jsonObject.getJSONObject("wind").getDouble("speed"));
                 int feels_like = (int) Math.round(jsonObject.getJSONObject("main").getInt("feels_like"));
@@ -125,8 +146,8 @@ public class MainActivity extends AppCompatActivity {
                             +"\n"+ "Ощущается как "+ feels_like + "°C"
                             +"\n"+ "Ветер: "+ wind +" м/с");
             } catch (JSONException e) {
-                result_info.setText("Упс... Какие то проблемы!");
-                e.printStackTrace(); // Проверить
+                result_info.setText("Ошибка 4");
+                // e.printStackTrace();
             }
         }
     }
