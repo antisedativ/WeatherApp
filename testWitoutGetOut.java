@@ -125,7 +125,7 @@ public class MainActivity extends AppCompatActivity {
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
             if (result == null)
-                result_info.setText("ошибка");
+                result_info.setText("несущ город");
             else {
                 try {
                     JSONObject jsonObject = new JSONObject(result);
