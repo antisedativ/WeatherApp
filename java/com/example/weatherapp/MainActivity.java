@@ -45,23 +45,23 @@ public class MainActivity extends AppCompatActivity {
         main_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(user_field.getText().toString().trim().equals(""))
+                if (user_field.getText().toString().trim().equals(""))
                     Toast.makeText(MainActivity.this, R.string.no_user_input, Toast.LENGTH_LONG).show();
                 else {
 
                     String city = user_field.getText().toString();
                     String key = "8236be500fb1619f49986793c55f8c8b";
-                    String url_weather = "https://api.openweathermap.org/data/2.5/weather?q=" + city +"&appid=" + key +"&units=metric&lang=ru";
+                    String url_weather = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=" + key + "&units=metric&lang=ru";
 
                     new GetURLDate().execute(url_weather);
 
-                    Utils.hideKeyboard( MainActivity.this);
+                    Utils.hideKeyboard(MainActivity.this);
                 }
             }
         });
     }
 
-    public static class Utils{
+    public static class Utils {
         public static void hideKeyboard(@NonNull Activity activity) {
             // Check if no view has focus:
             View view = activity.getCurrentFocus();
@@ -92,26 +92,24 @@ public class MainActivity extends AppCompatActivity {
                 InputStream stream = connection.getInputStream();
                 reader = new BufferedReader(new InputStreamReader(stream));
 
-                StringBuffer  buffer = new StringBuffer();
+                StringBuffer buffer = new StringBuffer();
+//                buffer = "try again";
                 String line = "";
 
-                while((line = reader.readLine()) != null)
+                while ((line = reader.readLine()) != null)
                     buffer.append(line).append("\n");
 
                 return buffer.toString();
 
-            } catch (MalformedURLException e) {
-                result_info.setText("Ошибка 1");
+            }
+            catch (IOException e) {
                 e.printStackTrace();
-            } catch (IOException e) {
-                result_info.setText("Ошибка 2");
-                e.printStackTrace();
-            } finally {
-                if(connection != null)
+            }
+            finally {
+                if (connection != null)
                     connection.disconnect();
-
                 try {
-                    if(reader != null)
+                    if (reader != null)
                         reader.close();
                 } catch (IOException e) {
                     result_info.setText("Ошибка 3");
@@ -126,28 +124,31 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
+            if (result == null)
+                result_info.setText("несущ город");
+            else {
+                try {
+                    JSONObject jsonObject = new JSONObject(result);
 
-            try {
-                JSONObject jsonObject = new JSONObject(result);
+                    int wind = (int) Math.round(jsonObject.getJSONObject("wind").getDouble("speed"));
+                    int feels_like = (int) Math.round(jsonObject.getJSONObject("main").getInt("feels_like"));
+                    int temp = (int) Math.round(jsonObject.getJSONObject("main").getDouble("temp"));
+                    String description = "";
 
-                int wind =  (int) Math.round(jsonObject.getJSONObject("wind").getDouble("speed"));
-                int feels_like = (int) Math.round(jsonObject.getJSONObject("main").getInt("feels_like"));
-                int temp = (int)  Math.round(jsonObject.getJSONObject("main").getDouble("temp"));
-                String description = "";
+                    JSONArray weather = jsonObject.getJSONArray("weather");
+                    for (int i = 0; i < weather.length(); ++i) {
+                        JSONObject rec = weather.getJSONObject(i);
+                        description = rec.getString("description");
+                    }
 
-                JSONArray weather = jsonObject.getJSONArray("weather");
-                for (int i = 0; i < weather.length(); ++i) {
-                    JSONObject rec = weather.getJSONObject(i);
-                    description = rec.getString("description");
-                }
-
-                result_info.setText( description + " "
+                    result_info.setText(description + " "
                             + temp + "°C"
-                            +"\n"+ "Ощущается как "+ feels_like + "°C"
-                            +"\n"+ "Ветер: "+ wind +" м/с");
-            } catch (JSONException e) {
-                result_info.setText("Ошибка 4");
-                // e.printStackTrace();
+                            + "\n" + "Ощущается как " + feels_like + "°C"
+                            + "\n" + "Ветер: " + wind + " м/с");
+                } catch (JSONException e) {
+                    result_info.setText("Ошибка 4");
+                    // e.printStackTrace();
+                }
             }
         }
     }
