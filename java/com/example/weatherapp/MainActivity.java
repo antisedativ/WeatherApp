@@ -49,8 +49,12 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(MainActivity.this, R.string.no_user_input, Toast.LENGTH_LONG).show();
                 else {
 
-                    String city = user_field.getText().toString();
+                    String city = user_field.getText().toString().trim();
                     String key = "8236be500fb1619f49986793c55f8c8b";
+
+                    // hourly weather
+                    // https://api.openweathermap.org/data/2.5/onecall?lat=33.44&lon=-94.04&exclude=daily&appid=8236be500fb1619f49986793c55f8c8b
+
                     String url_weather = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=" + key + "&units=metric&lang=ru";
 
                     new GetURLDate().execute(url_weather);
@@ -93,7 +97,6 @@ public class MainActivity extends AppCompatActivity {
                 reader = new BufferedReader(new InputStreamReader(stream));
 
                 StringBuffer buffer = new StringBuffer();
-//                buffer = "try again";
                 String line = "";
 
                 while ((line = reader.readLine()) != null)
@@ -112,7 +115,6 @@ public class MainActivity extends AppCompatActivity {
                     if (reader != null)
                         reader.close();
                 } catch (IOException e) {
-                    result_info.setText("Ошибка 3");
                     e.printStackTrace();
                 }
             }
@@ -125,10 +127,12 @@ public class MainActivity extends AppCompatActivity {
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
             if (result == null)
-                result_info.setText("несущ город");
+                result_info.setText("Неправильное навазние");
             else {
                 try {
                     JSONObject jsonObject = new JSONObject(result);
+
+                    // humidity - Влажиность в %
 
                     int wind = (int) Math.round(jsonObject.getJSONObject("wind").getDouble("speed"));
                     int feels_like = (int) Math.round(jsonObject.getJSONObject("main").getInt("feels_like"));
@@ -146,8 +150,7 @@ public class MainActivity extends AppCompatActivity {
                             + "\n" + "Ощущается как " + feels_like + "°C"
                             + "\n" + "Ветер: " + wind + " м/с");
                 } catch (JSONException e) {
-                    result_info.setText("Ошибка 4");
-                    // e.printStackTrace();
+                    e.printStackTrace();
                 }
             }
         }

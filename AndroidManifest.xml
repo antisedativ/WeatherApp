@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.example.weatherapp">
+    package="com.example.weatherapp" >
+
     <uses-permission
+        android:name="android.permission.INTERNET"
         android:minSdkVersion="8"
-        android:targetSdkVersion="31"
-        android:name="android.permission.INTERNET"/>
+        android:targetSdkVersion="31" />
 
     <application
         android:allowBackup="true"
@@ -16,16 +17,21 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.WeatherApp"
-        tools:targetApi="31">
+        tools:targetApi="31" >
+        <!-- Splash Activity -->
         <activity
-            android:name=".MainActivity"
-            android:exported="true">
+            android:theme="@style/Splash_Screen"
+            android:exported="true"
+            android:name=".SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <!-- Main Activity -->
+        <activity
+            android:name=".MainActivity"
+            android:exported="true" >
+        </activity>
     </application>
-
 </manifest>
