@@ -4,6 +4,10 @@
     <string name="logo">Погода в вашем городе</string>
     <string name="hint_user_field">Введите город</string>
     <string name="main_button">Узнать погоду</string>
-
+    <string name="more_information_button">Погода на четыре дня</string>
+    <string name="extended_day_button">Подробнее на сегодня</string>
     <string name="no_user_input">Введите город</string>
+
+    <string name="header_adv">Погода на 4 дня</string>
+    <string name="back_btn">Назад</string>
 </resources>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.example.weatherapp" >
+    package="com.example.weatherapp">
 
     <uses-permission
         android:name="android.permission.INTERNET"
@@ -17,21 +17,27 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.WeatherApp"
-        tools:targetApi="31" >
-        <!-- Splash Activity -->
+        tools:targetApi="31">
         <activity
-            android:theme="@style/Splash_Screen"
+            android:name=".MoreToday"
+            android:exported="false" />
+        <activity
+            android:name=".AdvancedActivity"
+            android:exported="false" /> <!-- Splash Activity -->
+        <activity
+            android:name=".SplashActivity"
             android:exported="true"
-            android:name=".SplashActivity">
+            android:theme="@style/Splash_Screen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <!-- Main Activity -->
         <activity
             android:name=".MainActivity"
-            android:exported="true" >
-        </activity>
+            android:exported="true"/>
     </application>
+
 </manifest>

@@ -8,6 +8,7 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
+    <color name="navigationBar">#515151</color>
     <color name="background_main">#333</color>
     <color name="text_color_hint">#ccc</color>
     <color name="main_button">#FF018786</color>

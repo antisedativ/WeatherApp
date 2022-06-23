@@ -35,50 +35,51 @@
         android:textColorHint="@color/text_color_hint"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.494"
+        app:layout_constraintHorizontal_bias="0.434"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.338" />
+        app:layout_constraintVertical_bias="0.302" />
 
     <Button
         android:id="@+id/main_button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="215dp"
+        android:layout_height="54dp"
         android:layout_marginHorizontal="100sp"
         android:backgroundTint="@color/main_button"
         android:fontFamily="sans-serif"
         android:text="@string/main_button"
         app:layout_constraintBottom_toTopOf="@+id/result_info"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/user_field"
-        app:layout_constraintVertical_bias="0.375"
-        tools:layout_editor_absoluteX="100dp" />
+        app:layout_constraintVertical_bias="0.375" />
 
     <TextView
         android:id="@+id/result_info"
-        android:layout_width="214dp"
-        android:layout_height="128dp"
+        android:layout_width="192dp"
+        android:layout_height="86dp"
         android:layout_marginStart="87dp"
         android:fontFamily="sans-serif"
         android:textAlignment="viewStart"
-        android:textColor="@color/text_color_hint"
+        android:textColor="@color/white"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.854"
+        app:layout_constraintHorizontal_bias="0.878"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/user_field"
-        app:layout_constraintVertical_bias="0.498" />
+        app:layout_constraintVertical_bias="0.483" />
 
     <ImageView
         android:id="@+id/current_weather"
-        android:layout_width="99dp"
-        android:layout_height="98dp"
+        android:layout_width="130dp"
+        android:layout_height="117dp"
         android:layout_marginHorizontal="140sp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginEnd="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/result_info"
         app:layout_constraintTop_toBottomOf="@+id/user_field"
-        app:layout_constraintVertical_bias="0.449" />
+        app:layout_constraintVertical_bias="0.458" />
 
     <TextView
         android:id="@+id/exceptions_info"
@@ -91,6 +92,59 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/logo" />
+
+    <TextView
+        android:id="@+id/description_info"
+        android:layout_width="276dp"
+        android:layout_height="102dp"
+        android:textAlignment="viewStart"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.474"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/result_info"
+        app:layout_constraintVertical_bias="0.101" />
+
+    <TextView
+        android:id="@+id/coordinates"
+        android:layout_width="135dp"
+        android:layout_height="21dp"
+        app:layout_constraintBottom_toTopOf="@+id/logo"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.045"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.301" />
+
+    <Button
+        android:id="@+id/more_information_button"
+        android:layout_width="170dp"
+        android:layout_height="55dp"
+        android:backgroundTint="@color/main_button"
+        android:fontFamily="sans-serif"
+        android:text="@string/more_information_button"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/description_info"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <Button
+        android:id="@+id/extended_day_button"
+        android:layout_width="170dp"
+        android:layout_height="55dp"
+        android:backgroundTint="@color/main_button"
+        android:fontFamily="sans-serif"
+        android:text="@string/extended_day_button"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/description_info"
+        app:layout_constraintVertical_bias="0.0" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

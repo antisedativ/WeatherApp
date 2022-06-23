@@ -1,11 +1,10 @@
 package com.example.weatherapp;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
@@ -16,6 +15,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -25,15 +27,23 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 
 public class MainActivity extends AppCompatActivity {
 
+    // Для more today activity
+    private TextView current_desc;
+
+
+    // Для текущего активити
     private EditText user_field;
+    private Button more_inf_btn;
     private Button main_button;
+    private Button exten_btn;
     private TextView result_info;
     private TextView exceptions_info;
+    private TextView description_info;
+    private TextView coordinates;
     private ImageView current_weather;
 
     @Override
@@ -46,6 +56,13 @@ public class MainActivity extends AppCompatActivity {
         result_info = findViewById(R.id.result_info);
         current_weather = findViewById(R.id.current_weather);
         exceptions_info = findViewById(R.id.exceptions_info);
+        description_info = findViewById(R.id.description_info);
+        coordinates = findViewById(R.id.coordinates);
+        more_inf_btn = findViewById(R.id.more_information_button);
+        exten_btn = findViewById(R.id.extended_day_button);
+
+        exten_btn.setVisibility(View.INVISIBLE);
+        more_inf_btn.setVisibility(View.INVISIBLE);
 
         main_button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -59,17 +76,52 @@ public class MainActivity extends AppCompatActivity {
 
                     Utils.hideKeyboard(MainActivity.this);
 
-                    // hourly weather
-                    // https://api.openweathermap.org/data/2.5/onecall?lat=33.44&lon=-94.04&exclude=daily&appid=8236be500fb1619f49986793c55f8c8b
-
                     String url_weather = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=" + key + "&units=metric&lang=ru";
-
                     new GetURLDate().execute(url_weather);
+
+                    more_inf_btn.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Next_AdvancedActivity(coordinates);
+                        }});
+
+                    exten_btn.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Next_MoreToday(user_field);
+                        }});
                 }
             }
         });
     }
 
+    public void Next_AdvancedActivity(View view) {
+        Intent intent = new Intent(this, AdvancedActivity.class);
+
+        String lon = "", lat = "";
+        if(coordinates != null) {
+            String coords = "";
+            coords = coordinates.getText().toString();
+            lon = coords.split(" ", 2)[0];
+            lat = coords.replaceAll(".* ", "");
+        }
+
+        intent.putExtra("lat", lat);
+        intent.putExtra("lon", lon);
+
+        startActivity(intent);
+    }
+
+    public void Next_MoreToday(View view) {
+
+        Intent intent = new Intent(this, MoreToday.class);
+        String city = user_field.getText().toString().trim();
+        intent.putExtra("city", city);
+
+        startActivity(intent);
+    }
+
+    // Скрывает клавиатуру после нажатия на кнопку
     public static class Utils {
         public static void hideKeyboard(@NonNull Activity activity) {
             // Check if no view has focus:
@@ -81,8 +133,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    // "coord":{"lon":-0.1257,"lat":51.5085}
-
+    // Асинхронный переход на сайт с данными
     private class GetURLDate extends AsyncTask<String, String, String> {
 
         protected void onPreExecute() {
@@ -136,17 +187,16 @@ public class MainActivity extends AppCompatActivity {
             if (result == null) {
                 exceptions_info.setText("Неправильное навазние");
                 current_weather.setImageDrawable(null);
+                description_info.setText(null);
                 result_info.setText(null);
+                coordinates.setText(null);
+                more_inf_btn.setVisibility(View.INVISIBLE);
+                exten_btn.setVisibility(View.INVISIBLE);
             }
             else {
                 try {
                     JSONObject jsonObject = new JSONObject(result);
 
-                    // humidity - Влажиность в %
-
-                    int wind = (int) Math.round(jsonObject.getJSONObject("wind").getDouble("speed"));
-                    int feels_like = (int) Math.round(jsonObject.getJSONObject("main").getInt("feels_like"));
-                    int temp = (int) Math.round(jsonObject.getJSONObject("main").getDouble("temp"));
                     String description = "";
                     String icon_weather = "";
 
@@ -218,10 +268,20 @@ public class MainActivity extends AppCompatActivity {
                             current_weather.setImageDrawable(null);
                     }
 
-                    result_info.setText(description + " "
-                            + temp + "°C"
-                            + "\n" + "Ощущается как " + feels_like + "°C"
-                            + "\n" + "Ветер: " + wind + " м/с");
+                    int humidity = (int) Math.round(jsonObject.getJSONObject("main").getDouble("humidity"));
+                    int wind = (int) Math.round(jsonObject.getJSONObject("wind").getDouble("speed"));
+                    int feels_like = (int) Math.round(jsonObject.getJSONObject("main").getInt("feels_like"));
+                    int temp = (int) Math.round(jsonObject.getJSONObject("main").getDouble("temp"));
+
+
+                    description_info.setText("Ощущается как " + feels_like + "°C"
+                            + "\n" + "Ветер " + wind + " м/с"
+                            + "\n" + "Влажность " + humidity + "%");
+
+
+                    result_info.setText(description + " "+ temp + "°C");
+                    exten_btn.setVisibility(View.VISIBLE);
+                    more_inf_btn.setVisibility(View.VISIBLE);
 
                 } catch (JSONException e) {
                     e.printStackTrace();
