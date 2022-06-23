@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,6 +33,8 @@ public class MainActivity extends AppCompatActivity {
     private EditText user_field;
     private Button main_button;
     private TextView result_info;
+    private TextView exceptions_info;
+    private ImageView current_weather;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +44,8 @@ public class MainActivity extends AppCompatActivity {
         user_field = findViewById(R.id.user_field);
         main_button = findViewById(R.id.main_button);
         result_info = findViewById(R.id.result_info);
+        current_weather = findViewById(R.id.current_weather);
+        exceptions_info = findViewById(R.id.exceptions_info);
 
         main_button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -52,14 +57,14 @@ public class MainActivity extends AppCompatActivity {
                     String city = user_field.getText().toString().trim();
                     String key = "8236be500fb1619f49986793c55f8c8b";
 
+                    Utils.hideKeyboard(MainActivity.this);
+
                     // hourly weather
                     // https://api.openweathermap.org/data/2.5/onecall?lat=33.44&lon=-94.04&exclude=daily&appid=8236be500fb1619f49986793c55f8c8b
 
                     String url_weather = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=" + key + "&units=metric&lang=ru";
 
                     new GetURLDate().execute(url_weather);
-
-                    Utils.hideKeyboard(MainActivity.this);
                 }
             }
         });
@@ -76,11 +81,13 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    // "coord":{"lon":-0.1257,"lat":51.5085}
+
     private class GetURLDate extends AsyncTask<String, String, String> {
 
         protected void onPreExecute() {
             super.onPreExecute();
-            result_info.setText("Ожидайте...");
+            exceptions_info.setText("Ожидайте...");
         }
 
         @Override
@@ -126,8 +133,11 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
-            if (result == null)
-                result_info.setText("Неправильное навазние");
+            if (result == null) {
+                exceptions_info.setText("Неправильное навазние");
+                current_weather.setImageDrawable(null);
+                result_info.setText(null);
+            }
             else {
                 try {
                     JSONObject jsonObject = new JSONObject(result);
@@ -138,17 +148,81 @@ public class MainActivity extends AppCompatActivity {
                     int feels_like = (int) Math.round(jsonObject.getJSONObject("main").getInt("feels_like"));
                     int temp = (int) Math.round(jsonObject.getJSONObject("main").getDouble("temp"));
                     String description = "";
+                    String icon_weather = "";
 
                     JSONArray weather = jsonObject.getJSONArray("weather");
                     for (int i = 0; i < weather.length(); ++i) {
                         JSONObject rec = weather.getJSONObject(i);
                         description = rec.getString("description");
+                        icon_weather = rec.getString("icon");
+                    }
+
+                    exceptions_info.setText(null);
+
+                    switch (icon_weather) {
+                        case "01d":
+                            current_weather.setImageResource(R.drawable.w01d);
+                            break;
+                        case "01n":
+                            current_weather.setImageResource(R.drawable.w01n);
+                            break;
+                        case "02d":
+                            current_weather.setImageResource(R.drawable.w02d);
+                            break;
+                        case "02n":
+                            current_weather.setImageResource(R.drawable.w02n);
+                            break;
+                        case "03d":
+                            current_weather.setImageResource(R.drawable.w03d);
+                            break;
+                        case "03n":
+                            current_weather.setImageResource(R.drawable.w03n);
+                            break;
+                        case "04d":
+                            current_weather.setImageResource(R.drawable.w04d);
+                            break;
+                        case "04n":
+                            current_weather.setImageResource(R.drawable.w04n);
+                            break;
+                        case "09d":
+                            current_weather.setImageResource(R.drawable.w09d);
+                            break;
+                        case "09n":
+                            current_weather.setImageResource(R.drawable.w09n);
+                            break;
+                        case "10d":
+                            current_weather.setImageResource(R.drawable.w10d);
+                            break;
+                        case "10n":
+                            current_weather.setImageResource(R.drawable.w10n);
+                            break;
+                        case "11d":
+                            current_weather.setImageResource(R.drawable.w11d);
+                            break;
+                        case "11n":
+                            current_weather.setImageResource(R.drawable.w11n);
+                            break;
+                        case "13d":
+                            current_weather.setImageResource(R.drawable.w13d);
+                            break;
+                        case "13n":
+                            current_weather.setImageResource(R.drawable.w13n);
+                            break;
+                        case "50d":
+                            current_weather.setImageResource(R.drawable.w50d);
+                            break;
+                        case "50n":
+                            current_weather.setImageResource(R.drawable.w50n);
+                            break;
+                        default:
+                            current_weather.setImageDrawable(null);
                     }
 
                     result_info.setText(description + " "
                             + temp + "°C"
                             + "\n" + "Ощущается как " + feels_like + "°C"
                             + "\n" + "Ветер: " + wind + " м/с");
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
