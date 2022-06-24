@@ -79,11 +79,9 @@ public class MoreToday extends AppCompatActivity {
 
                 return buffer.toString();
 
-            }
-            catch (IOException e) {
+            } catch (IOException e) {
                 e.printStackTrace();
-            }
-            finally {
+            } finally {
                 if (connection != null)
                     connection.disconnect();
                 try {
@@ -113,23 +111,22 @@ public class MoreToday extends AppCompatActivity {
                     int temp_min = (int) Math.round(jsonObject.getJSONObject("main").getDouble("temp_min"));
                     int temp_max = (int) Math.round(jsonObject.getJSONObject("main").getDouble("temp_max"));
                     int pressure = (int) jsonObject.getJSONObject("main").getDouble("pressure");
-                    int gust = (int) Math.round(jsonObject.getJSONObject("wind").getDouble("gust"));
 
-                // Попробовать скрыть текст вью на главном экране и передать его на это активити
-                    current_desc.setText("DA");
-//                    current_desc.setText("Температура "+ temp+ "°C\n"
-//                            + "Ощущается как " +feels_like + "°C\n"
-//                            + "Максимальная темаратура за сегодня " + temp_max + "°C\n"
-//                            + "Минимальная темаратура за сегодня " + temp_min + "°C\n"
-//                            + "Влажность " + humidity + "%\n"
-//                            + "Ветер " + wind + " м/с с порывами до "
-//                            + gust + "м/с\n"
-//                            + "Атмосферное давление" + pressure + "мм рт. ст.");
+                    // hpa to mmhg
+                    pressure *= 0.75006375541921;
+
+                    // Попробовать скрыть текст вью на главном экране и передать его на это активити
+                    current_desc.setText("Температура " + temp + "°C\n\n"
+                            + "Ощущается как " + feels_like + "°C\n\n"
+                            + "Макс. темаратура за сегодня " + temp_max + "°C\n\n"
+                            + "Мин. темаратура за сегодня " + temp_min + "°C\n\n"
+                            + "Влажность " + humidity + "%\n\n"
+                            + "Ветер " + wind + " м/с\n\n"
+                            + "Атмосферное давление " + pressure + " мм рт. ст.");
 
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-            }
         }
-
+    }
 }

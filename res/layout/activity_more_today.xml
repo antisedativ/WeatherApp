@@ -23,14 +23,16 @@
 
     <TextView
         android:id="@+id/current_desc"
-        android:layout_width="288dp"
-        android:layout_height="458dp"
+        android:layout_width="289dp"
+        android:layout_height="529dp"
         android:fontFamily="sans-serif"
-        android:textAlignment="center"
+        android:textAlignment="viewStart"
         android:textColor="@color/white"
         android:textSize="25sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.721"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.661" />
 </androidx.constraintlayout.widget.ConstraintLayout>
