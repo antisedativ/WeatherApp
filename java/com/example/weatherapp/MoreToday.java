@@ -4,16 +4,12 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -46,6 +42,7 @@ public class MoreToday extends AppCompatActivity {
         String key = "8236be500fb1619f49986793c55f8c8b";
         String city = getIntent().getStringExtra("city");
         String url_weather = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=" + key + "&units=metric&lang=ru";
+
         new GetURLDate().execute(url_weather);
     }
 
@@ -103,6 +100,7 @@ public class MoreToday extends AppCompatActivity {
                 try {
                     JSONObject jsonObject = new JSONObject(result);
 
+                    // Получение всех данных с api
                     int humidity = (int) jsonObject.getJSONObject("main").getDouble("humidity");
                     int wind = (int) Math.round(jsonObject.getJSONObject("wind").getDouble("speed"));
                     int feels_like = (int) Math.round(jsonObject.getJSONObject("main").getInt("feels_like"));

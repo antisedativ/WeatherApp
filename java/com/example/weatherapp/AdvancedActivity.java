@@ -23,25 +23,37 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 public class AdvancedActivity extends AppCompatActivity {
+    private TextView d1_desc;
+    private TextView d2_desc;
+    private TextView d3_desc;
+    private TextView d4_desc;
+
+    private ImageView d1_icon;
+    private ImageView d2_icon;
+    private ImageView d3_icon;
+    private ImageView d4_icon;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_advanced);
 
-        TextView[] desc = new TextView[4];
-        desc[0] = findViewById(R.id.day1_desc_adv);
-        desc[1] = findViewById(R.id.day2_desc_adv);
-        desc[2] = findViewById(R.id.day3_desc_adv);
-        desc[3] = findViewById(R.id.day4_desc_adv);
+        d1_desc = findViewById(R.id.day1_desc_adv);
+        d2_desc= findViewById(R.id.day2_desc_adv);
+        d3_desc = findViewById(R.id.day3_desc_adv);
+        d4_desc = findViewById(R.id.day4_desc_adv);
 
-        ImageView[] icons = new ImageView[4];
-        icons[0] = findViewById(R.id.day1_icon_adv);
-        icons[1] = findViewById(R.id.day2_icon_adv);
-        icons[2] = findViewById(R.id.day3_icon_adv);
-        icons[3] = findViewById(R.id.day4_icon_adv);
+        d1_icon = findViewById(R.id.day1_icon_adv);
+        d2_icon = findViewById(R.id.day2_icon_adv);
+        d3_icon = findViewById(R.id.day3_icon_adv);
+        d4_icon = findViewById(R.id.day4_icon_adv);
 
         Button back_btn = findViewById(R.id.back_btn_adv);
+
+        d1_icon.setImageDrawable(null);
+        d2_icon.setImageDrawable(null);
+        d3_icon.setImageDrawable(null);
+        d4_icon.setImageDrawable(null);
 
         // Слушатель перехода назад
         back_btn.setOnClickListener(new View.OnClickListener() {
@@ -54,10 +66,20 @@ public class AdvancedActivity extends AppCompatActivity {
         String lon = getIntent().getStringExtra("lon");
         String lat = getIntent().getStringExtra("lat");
 
-
          String url_coords = "https://api.openweathermap.org/data/2.5/onecall?lat="+ lat+ "&lon=" + lon + "&exclude=minutely,hourly&appid=" + key + "&units=metric&lang=ru";
-         //new GetURLDate().execute(url_coords);
+         new GetURLDate().execute(url_coords);
+    }
+    public void BackActivity(){
+        startActivity(new Intent(this, MainActivity.class));
+        finish();
+    }
 
+    public String Date(String dt) {
+
+        int unix_seconds = Integer.parseInt(dt);
+
+        java.util.Date time = new java.util.Date((long)unix_seconds*1000);
+        return time.toString().substring(4, 10);
     }
 
     private class GetURLDate extends AsyncTask<String, String, String> {
@@ -108,42 +130,118 @@ public class AdvancedActivity extends AppCompatActivity {
                 try {
                     JSONObject jsonObject = new JSONObject(result);
 
-
-                    String date = "";
                     JSONArray daily = jsonObject.getJSONArray("daily");
+
+                    int[] tempDay = new int[daily.length()];
+                    int[] tempNight = new int[daily.length()];
+                    int[] wind_speed = new int[daily.length()];
+                    int[] humidity = new int[daily.length()];
+
+                    String[] date = new String[daily.length()];
+                    String[] description = new String[daily.length()];
+                    String[] icon_weather = new String[daily.length()];
+
                     for (int i = 0; i < daily.length(); ++i) {
                         JSONObject rec = daily.getJSONObject(i);
-                        date = rec.getString("dt");
+                        date[i]= rec.getString("dt");
+
+                        tempDay[i] = (int) Math.round(rec.getJSONObject("temp").getDouble("day"));
+                        tempNight[i] = (int) Math.round(rec.getJSONObject("temp").getDouble("night"));
+                        wind_speed[i] = (int) Math.round(rec.getDouble("wind_speed"));
+                        humidity[i] = (int) Math.round(rec.getDouble("humidity"));
+
+                        JSONArray weather = rec.getJSONArray("weather");
+
+                        for (int j = 0; j < weather.length(); ++j) {
+                            JSONObject cw = weather.getJSONObject(j);
+                            description[i] = cw.getString("description");
+                            icon_weather[i] = cw.getString("icon");
+                        }
                     }
 
-                    String description = "";
-                    String icon_weather = "";
+                    TextView[] desc = new TextView[4];
+                    desc[0] = d1_desc;
+                    desc[1] = d2_desc;
+                    desc[2] = d3_desc;
+                    desc[3] = d4_desc;
 
-                    JSONArray weather = jsonObject.getJSONArray("weather");
-                    for (int i = 0; i < daily.length(); ++i) {
-                        JSONObject rec = daily.getJSONObject(i);
-                        description = rec.getString("description");
-                        icon_weather = rec.getString("icon");
+                    for(int i = 1; i <= desc.length; ++i) {
+                        desc[i-1].setText(Date(date[i]) + " " + description[i]
+                                + "\nТемпература днём " + tempDay[i] + "°C"
+                                + "\nТемпература ночью " + tempNight[i] + "°C"
+                                + "\nВетер " + wind_speed[i] + "м/с"
+                                + "\nВлажность " + humidity[i] + "%");
                     }
 
-                    int humidity = (int) Math.round(jsonObject.getJSONObject("main").getDouble("humidity"));
-                    int wind = (int) Math.round(jsonObject.getJSONObject("wind").getDouble("speed"));
-                    int feels_like = (int) Math.round(jsonObject.getJSONObject("main").getInt("feels_like"));
-                    int temp = (int) Math.round(jsonObject.getJSONObject("main").getDouble("temp"));
+                    ImageView[] icons = new ImageView[4];
+                    icons[0] = d1_icon;
+                    icons[1] = d2_icon;
+                    icons[2] = d3_icon;
+                    icons[3] = d4_icon;
 
-
-
+                    for(int i = 0; i < icons.length; ++i) {
+                        switch (icon_weather[i]) {
+                            case "01d":
+                                icons[i].setImageResource(R.drawable.w01d);
+                                break;
+                            case "01n":
+                                icons[i].setImageResource(R.drawable.w01n);
+                                break;
+                            case "02d":
+                                icons[i].setImageResource(R.drawable.w02d);
+                                break;
+                            case "02n":
+                                icons[i].setImageResource(R.drawable.w02n);
+                                break;
+                            case "03n":
+                                icons[i].setImageResource(R.drawable.w03n);
+                                break;
+                            case "03d":
+                                icons[i].setImageResource(R.drawable.w03d);
+                                break;
+                            case "04n":
+                                icons[i].setImageResource(R.drawable.w04n);
+                                break;
+                            case "04d":
+                                icons[i].setImageResource(R.drawable.w04d);
+                                break;
+                            case "09n":
+                                icons[i].setImageResource(R.drawable.w09n);
+                                break;
+                            case "09d":
+                                icons[i].setImageResource(R.drawable.w09d);
+                                break;
+                            case "10n":
+                                icons[i].setImageResource(R.drawable.w10n);
+                                break;
+                            case "10d":
+                                icons[i].setImageResource(R.drawable.w10d);
+                                break;
+                            case "11n":
+                                icons[i].setImageResource(R.drawable.w11n);
+                                break;
+                            case "11d":
+                                icons[i].setImageResource(R.drawable.w11d);
+                                break;
+                            case "13d":
+                                icons[i].setImageResource(R.drawable.w13d);
+                                break;
+                            case "13n":
+                                icons[i].setImageResource(R.drawable.w13n);
+                                break;
+                            case "50d":
+                                icons[i].setImageResource(R.drawable.w50d);
+                                break;
+                            case "50n":
+                                icons[i].setImageResource(R.drawable.w50n);
+                                break;
+                        }
+                    }
 
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
         }
-    }
-
-
-    public void BackActivity(){
-        startActivity(new Intent(this, MainActivity.class));
-        finish();
     }
 }
 

@@ -12,7 +12,7 @@
         android:layout_width="200dp"
         android:layout_height="100dp"
         android:layout_marginTop="120dp"
-
+        android:textColor="@color/white"
         app:layout_constraintBottom_toTopOf="@+id/day2_desc_adv"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.824"
@@ -25,7 +25,7 @@
         android:layout_width="200dp"
         android:layout_height="100dp"
         android:layout_marginTop="260dp"
-
+        android:textColor="@color/white"
         app:layout_constraintBottom_toTopOf="@+id/day3_desc_adv"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.824"
@@ -38,7 +38,7 @@
         android:layout_width="200dp"
         android:layout_height="100dp"
         android:layout_marginTop="392dp"
-
+        android:textColor="@color/white"
         app:layout_constraintBottom_toTopOf="@+id/day4_desc_adv"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.824"
@@ -50,18 +50,19 @@
         android:id="@+id/day4_desc_adv"
         android:layout_width="200dp"
         android:layout_height="100dp"
+        android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.824"
+        app:layout_constraintHorizontal_bias="0.81"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.928" />
+        app:layout_constraintVertical_bias="0.837" />
 
     <ImageView
         android:id="@+id/day3_icon_adv"
         android:layout_width="93dp"
         android:layout_height="93dp"
-        android:layout_marginStart="52dp"
+        android:layout_marginStart="15dp"
         android:layout_marginTop="392dp"
 
         app:layout_constraintBottom_toTopOf="@+id/day4_icon_adv"
@@ -76,7 +77,7 @@
         android:id="@+id/day1_icon_adv"
         android:layout_width="93dp"
         android:layout_height="93dp"
-        android:layout_marginStart="52dp"
+        android:layout_marginStart="15dp"
         android:layout_marginTop="120dp"
 
         app:layout_constraintBottom_toTopOf="@+id/day2_icon_adv"
@@ -92,20 +93,20 @@
         android:id="@+id/day4_icon_adv"
         android:layout_width="93dp"
         android:layout_height="93dp"
-        android:layout_marginStart="52dp"
+        android:layout_marginStart="15dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/day4_desc_adv"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="0.016"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.915"
+        app:layout_constraintVertical_bias="0.829"
         app:srcCompat="@drawable/w01d" />
 
     <ImageView
         android:id="@+id/day2_icon_adv"
         android:layout_width="93dp"
         android:layout_height="93dp"
-        android:layout_marginStart="52dp"
+        android:layout_marginStart="15dp"
         android:layout_marginTop="260dp"
 
         app:layout_constraintBottom_toTopOf="@+id/day3_icon_adv"
@@ -143,9 +144,9 @@
 
         app:layout_constraintBottom_toTopOf="@+id/day1_desc_adv"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.925"
+        app:layout_constraintHorizontal_bias="0.912"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="0.138" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

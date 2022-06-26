@@ -111,6 +111,7 @@
         android:id="@+id/coordinates"
         android:layout_width="135dp"
         android:layout_height="21dp"
+        android:textColor="#333"
         app:layout_constraintBottom_toTopOf="@+id/logo"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.045"

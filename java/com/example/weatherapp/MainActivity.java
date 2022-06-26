@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
@@ -30,10 +29,6 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 public class MainActivity extends AppCompatActivity {
-
-    // Для more today activity
-    private TextView current_desc;
-
 
     // Для текущего активити
     private EditText user_field;
@@ -94,6 +89,21 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
+//    @Override
+//    public void onSaveInstanceState(Bundle savedInstanceState) {
+//        super.onSaveInstanceState(savedInstanceState);
+//
+//        savedInstanceState.putString("City", result_info.toString());
+//    }
+//
+//    @Override
+//    public void onRestoreInstanceState(Bundle savedInstanceState) {
+//        super.onRestoreInstanceState(savedInstanceState);
+//
+//        String city = savedInstanceState.getString("City");
+//        result_info.setText(city);
+//    }
 
     public void Next_AdvancedActivity(View view) {
         Intent intent = new Intent(this, AdvancedActivity.class);
@@ -208,6 +218,11 @@ public class MainActivity extends AppCompatActivity {
                     }
 
                     exceptions_info.setText(null);
+
+                    // Достаем координаты введенного города
+                    float lon = (float) jsonObject.getJSONObject("coord").getDouble("lon");
+                    float lat = (float) jsonObject.getJSONObject("coord").getDouble("lat");
+                    coordinates.setText(lon+" "+lat);
 
                     switch (icon_weather) {
                         case "01d":
