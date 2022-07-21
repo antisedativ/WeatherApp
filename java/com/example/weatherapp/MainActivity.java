@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageSwitcher;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -27,6 +28,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -89,21 +93,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-
-//    @Override
-//    public void onSaveInstanceState(Bundle savedInstanceState) {
-//        super.onSaveInstanceState(savedInstanceState);
-//
-//        savedInstanceState.putString("City", result_info.toString());
-//    }
-//
-//    @Override
-//    public void onRestoreInstanceState(Bundle savedInstanceState) {
-//        super.onRestoreInstanceState(savedInstanceState);
-//
-//        String city = savedInstanceState.getString("City");
-//        result_info.setText(city);
-//    }
 
     public void Next_AdvancedActivity(View view) {
         Intent intent = new Intent(this, AdvancedActivity.class);
@@ -216,7 +205,6 @@ public class MainActivity extends AppCompatActivity {
                         description = rec.getString("description");
                         icon_weather = rec.getString("icon");
                     }
-
                     exceptions_info.setText(null);
 
                     // Достаем координаты введенного города
@@ -224,64 +212,37 @@ public class MainActivity extends AppCompatActivity {
                     float lat = (float) jsonObject.getJSONObject("coord").getDouble("lat");
                     coordinates.setText(lon+" "+lat);
 
-                    switch (icon_weather) {
-                        case "01d":
-                            current_weather.setImageResource(R.drawable.w01d);
-                            break;
-                        case "01n":
-                            current_weather.setImageResource(R.drawable.w01n);
-                            break;
-                        case "02d":
-                            current_weather.setImageResource(R.drawable.w02d);
-                            break;
-                        case "02n":
-                            current_weather.setImageResource(R.drawable.w02n);
-                            break;
-                        case "03d":
-                            current_weather.setImageResource(R.drawable.w03d);
-                            break;
-                        case "03n":
-                            current_weather.setImageResource(R.drawable.w03n);
-                            break;
-                        case "04d":
-                            current_weather.setImageResource(R.drawable.w04d);
-                            break;
-                        case "04n":
-                            current_weather.setImageResource(R.drawable.w04n);
-                            break;
-                        case "09d":
-                            current_weather.setImageResource(R.drawable.w09d);
-                            break;
-                        case "09n":
-                            current_weather.setImageResource(R.drawable.w09n);
-                            break;
-                        case "10d":
-                            current_weather.setImageResource(R.drawable.w10d);
-                            break;
-                        case "10n":
-                            current_weather.setImageResource(R.drawable.w10n);
-                            break;
-                        case "11d":
-                            current_weather.setImageResource(R.drawable.w11d);
-                            break;
-                        case "11n":
-                            current_weather.setImageResource(R.drawable.w11n);
-                            break;
-                        case "13d":
-                            current_weather.setImageResource(R.drawable.w13d);
-                            break;
-                        case "13n":
-                            current_weather.setImageResource(R.drawable.w13n);
-                            break;
-                        case "50d":
-                            current_weather.setImageResource(R.drawable.w50d);
-                            break;
-                        case "50n":
-                            current_weather.setImageResource(R.drawable.w50n);
-                            break;
-                        default:
-                            current_weather.setImageDrawable(null);
-                    }
+                    HashMap<String, Integer> n = new HashMap<>();
+                    n.put("01", R.drawable.w01n);
+                    n.put("02", R.drawable.w02n);
+                    n.put("03", R.drawable.w03n);
+                    n.put("04", R.drawable.w04n);
+                    n.put("09", R.drawable.w09n);
+                    n.put("10", R.drawable.w10n);
+                    n.put("11", R.drawable.w11n);
+                    n.put("13", R.drawable.w13n);
+                    n.put("50", R.drawable.w50n);
+
+                    HashMap<String, Integer> d = new HashMap<>();
+                    d.put("01", R.drawable.w01d);
+                    d.put("02", R.drawable.w02d);
+                    d.put("03", R.drawable.w03d);
+                    d.put("04", R.drawable.w04d);
+                    d.put("09", R.drawable.w09d);
+                    d.put("10", R.drawable.w10d);
+                    d.put("11", R.drawable.w11d);
+                    d.put("13", R.drawable.w13d);
+                    d.put("50", R.drawable.w50d);
+
+                    String icon_weather_last_letter = icon_weather.substring(icon_weather.length() - 1);
+                    String rest_icon_weather = icon_weather.substring(0, icon_weather.length() - 1);
+
+                    if(icon_weather_last_letter.equals("n"))
+                        current_weather.setImageResource(n.get(rest_icon_weather));
+                    else if(icon_weather_last_letter.equals("d"))
+                        current_weather.setImageResource(d.get(rest_icon_weather));
+                    else
+                        current_weather.setImageDrawable(null);
 
                     int humidity = (int) Math.round(jsonObject.getJSONObject("main").getDouble("humidity"));
                     int wind = (int) Math.round(jsonObject.getJSONObject("wind").getDouble("speed"));

@@ -21,6 +21,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.HashMap;
 
 public class AdvancedActivity extends AppCompatActivity {
     private TextView d1_desc;
@@ -179,63 +180,40 @@ public class AdvancedActivity extends AppCompatActivity {
                     icons[2] = d3_icon;
                     icons[3] = d4_icon;
 
+                    HashMap<String, Integer> n = new HashMap<>();
+                    n.put("01", R.drawable.w01n);
+                    n.put("02", R.drawable.w02n);
+                    n.put("03", R.drawable.w03n);
+                    n.put("04", R.drawable.w04n);
+                    n.put("09", R.drawable.w09n);
+                    n.put("10", R.drawable.w10n);
+                    n.put("11", R.drawable.w11n);
+                    n.put("13", R.drawable.w13n);
+                    n.put("50", R.drawable.w50n);
+
+                    HashMap<String, Integer> d = new HashMap<>();
+                    d.put("01", R.drawable.w01d);
+                    d.put("02", R.drawable.w02d);
+                    d.put("03", R.drawable.w03d);
+                    d.put("04", R.drawable.w04d);
+                    d.put("09", R.drawable.w09d);
+                    d.put("10", R.drawable.w10d);
+                    d.put("11", R.drawable.w11d);
+                    d.put("13", R.drawable.w13d);
+                    d.put("50", R.drawable.w50d);
+
+
                     for(int i = 0; i < icons.length; ++i) {
-                        switch (icon_weather[i]) {
-                            case "01d":
-                                icons[i].setImageResource(R.drawable.w01d);
-                                break;
-                            case "01n":
-                                icons[i].setImageResource(R.drawable.w01n);
-                                break;
-                            case "02d":
-                                icons[i].setImageResource(R.drawable.w02d);
-                                break;
-                            case "02n":
-                                icons[i].setImageResource(R.drawable.w02n);
-                                break;
-                            case "03n":
-                                icons[i].setImageResource(R.drawable.w03n);
-                                break;
-                            case "03d":
-                                icons[i].setImageResource(R.drawable.w03d);
-                                break;
-                            case "04n":
-                                icons[i].setImageResource(R.drawable.w04n);
-                                break;
-                            case "04d":
-                                icons[i].setImageResource(R.drawable.w04d);
-                                break;
-                            case "09n":
-                                icons[i].setImageResource(R.drawable.w09n);
-                                break;
-                            case "09d":
-                                icons[i].setImageResource(R.drawable.w09d);
-                                break;
-                            case "10n":
-                                icons[i].setImageResource(R.drawable.w10n);
-                                break;
-                            case "10d":
-                                icons[i].setImageResource(R.drawable.w10d);
-                                break;
-                            case "11n":
-                                icons[i].setImageResource(R.drawable.w11n);
-                                break;
-                            case "11d":
-                                icons[i].setImageResource(R.drawable.w11d);
-                                break;
-                            case "13d":
-                                icons[i].setImageResource(R.drawable.w13d);
-                                break;
-                            case "13n":
-                                icons[i].setImageResource(R.drawable.w13n);
-                                break;
-                            case "50d":
-                                icons[i].setImageResource(R.drawable.w50d);
-                                break;
-                            case "50n":
-                                icons[i].setImageResource(R.drawable.w50n);
-                                break;
-                        }
+
+                        String icon_weather_last_letter = icon_weather[i].substring(icon_weather[i].length() - 1);
+                        String rest_icon_weather = icon_weather[i].substring(0, icon_weather[i].length() - 1);
+
+                        if(icon_weather_last_letter.equals("n"))
+                            icons[i].setImageResource(n.get(rest_icon_weather));
+                        else if(icon_weather_last_letter.equals("d"))
+                            icons[i].setImageResource(d.get(rest_icon_weather));
+                        else
+                            icons[i].setImageDrawable(null);
                     }
 
                 } catch (JSONException e) {
